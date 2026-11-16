@@ -16,3 +16,12 @@
 * Player recieves money (points) for shooting the zombies
 * Each bullet hit gives 25$ to the player
 * Use the Money to open Doors and Escape
+
+## Houston driving prototype
+
+The default startup map now uses an arcade-driving prototype with a procedural placeholder city and a simple primitive car. No Houston RealityScan reconstruction or vehicle model is included; see `Content/HoustonRealityScan/README.md` for the import location and workflow.
+
+### Controls
+* W / S: accelerate / reverse
+* A / D: steer
+* Space: brake
