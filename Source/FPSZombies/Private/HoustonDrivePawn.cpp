@@ -13,8 +13,11 @@ AHoustonDrivePawn::AHoustonDrivePawn()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	USceneComponent* VehicleRoot = CreateDefaultSubobject<USceneComponent>(TEXT("VehicleRoot"));
+	SetRootComponent(VehicleRoot);
+
 	CollisionBody = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBody"));
-	SetRootComponent(CollisionBody);
+	CollisionBody->SetupAttachment(VehicleRoot);
 	CollisionBody->SetBoxExtent(FVector(205.0f, 92.0f, 52.0f));
 	CollisionBody->SetRelativeLocation(FVector(0.0f, 0.0f, 56.0f));
 	CollisionBody->SetCollisionProfileName(TEXT("Pawn"));
@@ -27,8 +30,8 @@ AHoustonDrivePawn::AHoustonDrivePawn()
 		TEXT("/Game/StarterContent/Materials/M_Metal_Steel.M_Metal_Steel"));
 
 	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CarBody"));
-	BodyMesh->SetupAttachment(CollisionBody);
-	BodyMesh->SetRelativeLocation(FVector::ZeroVector);
+	BodyMesh->SetupAttachment(VehicleRoot);
+	BodyMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 56.0f));
 	BodyMesh->SetRelativeScale3D(FVector(4.0f, 1.8f, 0.72f));
 	BodyMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	if (CubeMesh.Succeeded())
@@ -41,16 +44,16 @@ AHoustonDrivePawn::AHoustonDrivePawn()
 	}
 
 	const FVector WheelLocations[] = {
-		FVector(128.0f, -91.0f, -28.0f),
-		FVector(128.0f, 91.0f, -28.0f),
-		FVector(-128.0f, -91.0f, -28.0f),
-		FVector(-128.0f, 91.0f, -28.0f)
+		FVector(128.0f, -91.0f, 28.0f),
+		FVector(128.0f, 91.0f, 28.0f),
+		FVector(-128.0f, -91.0f, 28.0f),
+		FVector(-128.0f, 91.0f, 28.0f)
 	};
 	for (int32 Index = 0; Index < UE_ARRAY_COUNT(WheelLocations); ++Index)
 	{
 		UStaticMeshComponent* Wheel = CreateDefaultSubobject<UStaticMeshComponent>(
 			*FString::Printf(TEXT("Wheel%d"), Index));
-		Wheel->SetupAttachment(CollisionBody);
+		Wheel->SetupAttachment(VehicleRoot);
 		Wheel->SetRelativeLocation(WheelLocations[Index]);
 		Wheel->SetRelativeRotation(FRotator(90.0f, 0.0f, 0.0f));
 		Wheel->SetRelativeScale3D(FVector(0.55f, 0.55f, 0.18f));
@@ -63,8 +66,8 @@ AHoustonDrivePawn::AHoustonDrivePawn()
 	}
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(CollisionBody);
-	CameraBoom->SetRelativeLocation(FVector(0.0f, 0.0f, 150.0f));
+	CameraBoom->SetupAttachment(VehicleRoot);
+	CameraBoom->SetRelativeLocation(FVector(0.0f, 0.0f, 206.0f));
 	CameraBoom->TargetArmLength = 720.0f;
 	CameraBoom->SetRelativeRotation(FRotator(-12.0f, 0.0f, 0.0f));
 	CameraBoom->bUsePawnControlRotation = false;
